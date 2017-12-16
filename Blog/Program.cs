@@ -9,46 +9,38 @@ namespace Blog
     {
         static void Main(string[] args)
         {
-            var dao = new PostDAO();
+            PostDAO dao = new PostDAO();
 
-            Post post = new Post()
+            Post post = new Post
             {
-                Titulo = "Meu primeiro post", 
-                Conteudo = "Conteúdo do post", 
-                DataPublicacao = DateTime.Now.AddDays(-99), 
-                Publicado = true, 
-            };
-
-            dao.AdicionaPost(post);
-
-            post = new Post()
-            {
-                Titulo = "Meu segundo post",
-                Conteudo = "Conteúdo do post",
-                DataPublicacao = DateTime.Now.AddDays(-98),
+                Titulo = "Título com PostDAO",
+                Conteudo = "Conteúdo com PostDAO",
+                DataPublicacao = DateTime.Now,
                 Publicado = true,
             };
 
+            Console.WriteLine("Adicionando Post [Título = {0}]", post.Titulo);
             dao.AdicionaPost(post);
 
-            var posts = new List<Post>(dao.Lista());
+            int id = 1;
+            Console.WriteLine("Buscando Post [Id = {0}]", id);
+            post = dao.BuscaPorId(id);
+            Console.WriteLine("Título = {0}", post.Titulo);
 
-            foreach (var item in posts)
+            Console.WriteLine("Atualizando Post");
+            post.Titulo += " atualizado";
+            dao.Atualiza(post);
+
+            Console.WriteLine("Listando Posts");
+            IList<Post> lista = dao.Lista();
+
+            foreach (var item in dao.Lista())
             {
-                Console.WriteLine(item.Titulo);
-
-                if (dao.BuscaPorId(item.Id) != null)
-                {
-                    Console.WriteLine("Post encontrado, id = {0}", item.Id);
-                    item.Conteudo += " alterado";
-                    dao.Atualiza(item, item.Id);
-                    Console.WriteLine("Conteúdo atualizado");
-                }
-                else
-                {
-                    Console.WriteLine("Post NÂO encontrado, id = {0}", item.Id);
-                }
+                Console.WriteLine("Título = {0}", item.Titulo);
             }
+
+            Console.WriteLine("Deletando Post [Id = {0}]", post.Id);
+            dao.Remove(post);
         }
     }
 }
