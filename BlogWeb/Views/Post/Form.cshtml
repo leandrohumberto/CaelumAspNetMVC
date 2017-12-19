@@ -13,17 +13,22 @@
 <body>
     <div> 
         <form action="Adiciona" method="post">
+            @Html.ValidationMessage("post.Invalido")
+            @Html.ValidationMessage("titulo")
             <label>Título: 
-                <input type="text" name="titulo" />
-            </label><br />
+                <input type="text" name="titulo" value="@ViewBag.Post.Titulo" />
+            </label>
+            @Html.ValidationMessage("conteudo")
             <label>Conteúdo: 
-                <textarea name="conteudo"></textarea>
-            </label><br />
+                <textarea name="conteudo">@ViewBag.Post.Conteudo</textarea>
+            </label>
+            @Html.ValidationMessage("dataPublicacao")
             <label>Data de Publicação: 
-                <input type="date" name="dataPublicacao" />
-            </label><br/>
+                <input type="date" name="dataPublicacao" value="@ViewBag.Post.DataPublicacao" />
+            </label>
+            @Html.ValidationMessage("publicado")
             <label>Publicar? 
-                <input type="checkbox" name="publicado" value="true"/>
+                <input type="checkbox" name="publicado" value="true" checked="@ViewBag.Post.Publicado" />
             </label>
             <input type="submit" value="Cadastrar" />
         </form>

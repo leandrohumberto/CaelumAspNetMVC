@@ -16,15 +16,29 @@ namespace BlogWeb.Controllers
 
         public ActionResult Form()
         {
+            ViewBag.Post = new Post();
             return View();
         }
 
         [HttpPost]
         public ActionResult Adiciona(Post post)
         {
-            IPostDAO dao = new PostDAO();
-            dao.AdicionaPost(post);
-            return RedirectToAction(nameof(Index));
+            if (post.Publicado && !post.DataPublicacao.HasValue)
+            {
+                ModelState.AddModelError("post.Invalido", "Posts publicados precisam de data de publicação");
+            }
+
+            if (ModelState.IsValid)
+            {
+                IPostDAO dao = new PostDAO();
+                dao.AdicionaPost(post);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ViewBag.Post = post;
+                return View("Form");
+            }
         }
     }
 }
