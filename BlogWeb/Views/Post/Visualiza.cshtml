@@ -9,31 +9,33 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Novo Post</title>
+    <title>Visualiza</title>
 </head>
 <body>
     <div> 
-        @using (Html.BeginForm("Adiciona", "Post", FormMethod.Post))
+        @using (Html.BeginForm("Altera", "Post", FormMethod.Post))
         {
+            @Html.HiddenFor(p => p.Id);
+
             @Html.ValidationMessage("post.Invalido");
-            
+
             @Html.ValidationMessageFor(p => p.Titulo);
             @Html.LabelFor(p => p.Titulo);
             @Html.TextBoxFor(p => p.Titulo);
-            
+
             @Html.ValidationMessageFor(p => p.Conteudo);
             @Html.LabelFor(p => p.Conteudo);
             @Html.TextAreaFor(p => p.Conteudo);
-            
+
             @Html.ValidationMessageFor(p => p.DataPublicacao);
             @Html.LabelFor(p => p.DataPublicacao);
             @Html.TextBoxFor(p => p.DataPublicacao, "{0:yyyy-MM-dd}", new { type = "date" });
-            
+
             @Html.ValidationMessageFor(p => p.Publicado);
             @Html.LabelFor(p => p.Publicado);
             @Html.CheckBoxFor(p => p.Publicado);
 
-            <input type="submit" value="Cadastrar" />
+            <input type="submit" value="Alterar" />
         }
     </div>
 </body>

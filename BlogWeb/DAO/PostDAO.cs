@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 namespace BlogWeb.DAO
 {
-    public class PostDAO : IPostDAO
+    public class PostDAO : IDao<Post>
     {
-        public void AdicionaPost(Post post)
+        public void Adiciona(Post post)
         {
             using (ISession session = NHibernateHelper.AbreSession())
             using (ITransaction tx = session.BeginTransaction())
