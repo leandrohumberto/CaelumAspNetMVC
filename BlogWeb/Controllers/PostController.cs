@@ -8,6 +8,7 @@ namespace BlogWeb.Controllers
     public class PostController : Controller
     {
         // GET: Post
+        [Route("posts", Name = "ListaPosts")]
         public ActionResult Index()
         {
             var dao = PostDAOFactory.CreateDAO();
@@ -45,6 +46,7 @@ namespace BlogWeb.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Route("posts/{id}", Name = "VisualizaPost")]
         public ActionResult Visualiza(int id)
         {
             var dao = PostDAOFactory.CreateDAO();

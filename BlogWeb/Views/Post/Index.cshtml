@@ -1,40 +1,26 @@
 ﻿@model System.Collections.Generic.IList<BlogWeb.Models.Post>
 
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Posts</title>
-</head>
-<body>
-    <div> 
-        @Html.ActionLink("Novo Post", "Form")
-        <table>
-            <thead>
+<div> 
+    @Html.ActionLink("Novo Post", "Form")
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titulo</th>
+                <th>Data da Publicação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
                 <tr>
-                    <th>Id</th>
-                    <th>Titulo</th>
-                    <th>Data da Publicação</th>
+                    <td>@p.Id</td>
+                    <td>@p.Titulo</td>
+                    <td>@p.DataPublicacao</td>
+                    <td>@Html.ActionLink("Remover", "Remove", new { id = p.Id }, new { @class = "icon-cancel" })</td>
+                    <td>@Html.RouteLink("Editar", "VisualizaPost", new { id = p.Id }, new { @class = "icon-edit" })</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var p in Model)
-                {
-                    <tr>
-                        <td>@p.Id</td>
-                        <td>@p.Titulo</td>
-                        <td>@p.DataPublicacao</td>
-                        <td>@Html.ActionLink("Remover", "Remove", new { id = p.Id })</td>
-                        <td>@Html.ActionLink("Editar", "Visualiza", new { id = p.Id })</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</body>
-</html>
+            }
+        </tbody>
+    </table>
+</div>

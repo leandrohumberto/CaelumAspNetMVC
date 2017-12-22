@@ -1,0 +1,33 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Blog do Leandro</title>
+    <link href="~/Content/Css/normalize.css" rel="stylesheet" />
+    <link href="~/Content/Css/blog.css" rel="stylesheet" />
+    <link href="~/Content/Css/fontello-codes.css" rel="stylesheet" />
+    <link href="~/Content/Css/fontello.css" rel="stylesheet" />
+</head>
+<body>
+    @Html.Partial("_MenuSuperior")
+
+    @Html.Partial("_Cabecalho")
+    
+    <div class="conteudo">
+        <main>
+            @RenderBody()
+        </main>
+    </div>
+    <footer>
+        Copyright - Leandro Humberto
+    </footer>
+
+    @RenderSection("Scripts", false)
+</body>
+</html>
