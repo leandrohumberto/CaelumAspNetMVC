@@ -12,6 +12,7 @@ namespace BlogWeb.Mapeamentos
             Map(p => p.Conteudo);
             Map(p => p.DataPublicacao);
             Map(p => p.Publicado);
+            References(p => p.Autor, "AutorId");
         }
     }
 }

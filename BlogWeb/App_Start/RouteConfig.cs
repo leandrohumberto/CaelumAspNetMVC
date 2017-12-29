@@ -21,6 +21,11 @@ namespace BlogWeb
                 defaults : new { controller = "Post", action = "Form" });
 
             routes.MapRoute(
+                name: "NovoUsuario",
+                url: "novoUsuario",
+                defaults: new { controller = "Usuario", action = "Form" });
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

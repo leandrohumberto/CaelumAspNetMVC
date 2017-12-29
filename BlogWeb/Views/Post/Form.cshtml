@@ -1,25 +1,29 @@
-﻿@model BlogWeb.Models.Post
+﻿@model BlogWeb.ViewModels.PostModel
 
 <div> 
     @using (Html.BeginForm("Adiciona", "Post", FormMethod.Post))
     {
-        @Html.ValidationMessage("post.Invalido");
+        @Html.ValidationMessage("post.Invalido")
             
-        @Html.ValidationMessageFor(p => p.Titulo);
-        @Html.LabelFor(p => p.Titulo);
-        @Html.TextBoxFor(p => p.Titulo);
+        @Html.LabelFor(p => p.Titulo, "Título: ")
+        @Html.TextBoxFor(p => p.Titulo)
+        @Html.ValidationMessageFor(p => p.Titulo)
             
-        @Html.ValidationMessageFor(p => p.Conteudo);
-        @Html.LabelFor(p => p.Conteudo);
-        @Html.TextAreaFor(p => p.Conteudo, new { rows = 10 });
+        @Html.LabelFor(p => p.Conteudo, "Conteúdo: ")
+        @Html.TextAreaFor(p => p.Conteudo, new { rows = 10 })
+        @Html.ValidationMessageFor(p => p.Conteudo)
             
-        @Html.ValidationMessageFor(p => p.DataPublicacao);
-        @Html.LabelFor(p => p.DataPublicacao);
-        @Html.TextBoxFor(p => p.DataPublicacao, "{0:yyyy-MM-dd}", new { type = "date" });
+        @Html.LabelFor(p => p.DataPublicacao, "Data de Publicação: ")
+        @Html.TextBoxFor(p => p.DataPublicacao, "{0:yyyy-MM-dd}", new { type = "date" })
+        @Html.ValidationMessageFor(p => p.DataPublicacao)
             
-        @Html.ValidationMessageFor(p => p.Publicado);
-        @Html.LabelFor(p => p.Publicado);
-        @Html.CheckBoxFor(p => p.Publicado);
+        @Html.LabelFor(p => p.Publicado, "Publicado ")
+        @Html.CheckBoxFor(p => p.Publicado)
+        @Html.ValidationMessageFor(p => p.Publicado)
+
+        @Html.LabelFor(p => p.AutorId, "Autor: ")
+        @Html.DropDownListFor(p => p.AutorId, new SelectList(ViewBag.Usuarios, "Id", "Nome"), "Sem autor")
+        @Html.ValidationMessageFor(p => p.AutorId)
 
         <input type="submit" value="Cadastrar" />
     }

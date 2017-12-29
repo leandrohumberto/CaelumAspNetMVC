@@ -1,0 +1,28 @@
+﻿@model BlogWeb.Models.Usuario
+
+@using (Html.BeginForm("Adiciona", "Usuario", FormMethod.Post))
+{
+    @Html.LabelFor(u => u.Nome, "Nome: ")
+    @Html.TextBoxFor(u => u.Nome);
+    @Html.ValidationMessageFor(u => u.Nome);
+
+    @Html.LabelFor(u => u.Login, "Login: ")
+    @Html.TextBoxFor(u => u.Login);
+    @Html.ValidationMessageFor(u => u.Login);
+
+    @Html.LabelFor(u => u.Password, "Password: ")
+    @Html.PasswordFor(u => u.Password);
+    @Html.ValidationMessageFor(u => u.Password);
+
+    @Html.LabelFor(u => u.Email, "Email: ")
+    @Html.TextBoxFor(u => u.Email);
+    @Html.ValidationMessageFor(u => u.Email);
+
+    <input type="submit" value="Cadastrar" />
+}
+
+@section Scripts{
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

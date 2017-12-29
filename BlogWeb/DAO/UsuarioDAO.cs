@@ -5,57 +5,57 @@ using System.Collections.Generic;
 
 namespace BlogWeb.DAO
 {
-    public class PostDAO : IDao<Post>
+    public class UsuarioDAO : IDao<Usuario>
     {
         private ISession _session;
 
-        public PostDAO(ISession session)
+        public UsuarioDAO(ISession session)
         {
             _session = session ?? throw new ArgumentNullException(nameof(session));
         }
 
-        public void Adiciona(Post post)
+        public void Adiciona(Usuario usuario)
         {
             using (ITransaction tx = _session.BeginTransaction())
             {
-                _session.Save(post);
+                _session.Save(usuario);
                 tx.Commit();
             }
         }
 
-        public void Atualiza(Post post)
+        public void Atualiza(Usuario usuario)
         {
             using (ITransaction tx = _session.BeginTransaction())
             {
-                _session.Merge(post);
+                _session.Merge(usuario);
                 tx.Commit();
             }
         }
 
-        public Post BuscaPorId(int id)
+        public Usuario BuscaPorId(int id)
         {
-            Post post = _session.Get<Post>(id);
+            Usuario usuario = _session.Get<Usuario>(id);
 
-            if (post == null)
+            if (usuario == null)
             {
                 throw new ArgumentException("ID não encontrado", nameof(id));
             }
 
-            return post;
+            return usuario;
         }
 
-        public IList<Post> Lista()
+        public IList<Usuario> Lista()
         {
-            string hql = "select p from Post p";
+            string hql = "select u from Usuario u";
             IQuery query = _session.CreateQuery(hql);
-            return query.List<Post>();
+            return query.List<Usuario>();
         }
 
-        public void Remove(Post post)
+        public void Remove(Usuario usuario)
         {
             using (ITransaction tx = _session.BeginTransaction())
             {
-                _session.Delete(post);
+                _session.Delete(usuario);
                 tx.Commit();
             }
         }

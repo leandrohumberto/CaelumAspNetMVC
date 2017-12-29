@@ -1,5 +1,8 @@
 ﻿using BlogWeb.DAO;
+using BlogWeb.Infra;
 using BlogWeb.Models;
+using BlogWeb.ViewModels;
+using NHibernate;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -11,69 +14,98 @@ namespace BlogWeb.Controllers
         [Route("posts", Name = "ListaPosts")]
         public ActionResult Index()
         {
-            var dao = PostDAOFactory.CreateDAO();
-            IList<Post> posts = dao.Lista();
-            return View(posts);
+            using (ISession session = NHibernateHelper.AbreSession())
+            {
+                var dao = new PostDAO(session);
+                IList<Post> posts = dao.Lista();
+                return View(posts);
+            }
         }
 
         public ActionResult Form()
         {
-            return View();
+            using (ISession session = NHibernateHelper.AbreSession())
+            {
+                var dao = new PostDAO(session);
+                ViewBag.Usuarios = dao.Lista();
+                return View();
+            }
         }
 
         [HttpPost]
-        public ActionResult Adiciona(Post post)
+        public ActionResult Adiciona(PostModel viewModel)
         {
-            ExecutarValidacoesComplexas(post);
+            ExecutarValidacoesComplexas(viewModel);
 
-            if (ModelState.IsValid)
+            using (ISession session = NHibernateHelper.AbreSession())
             {
-                var dao = PostDAOFactory.CreateDAO();
-                dao.Adiciona(post);
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                return View("Form", post);
+                if (ModelState.IsValid)
+                {
+                    var post = viewModel.CriaPost();
+                    var postDAO = new PostDAO(session);
+                    postDAO.Adiciona(post);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    var usuarioDAO = new UsuarioDAO(session);
+                    ViewBag.Usuarios = usuarioDAO.Lista();
+                    return View("Form", viewModel);
+                }
             }
         }
 
         public ActionResult Remove(int id)
         {
-            var dao = PostDAOFactory.CreateDAO();
-            Post post = dao.BuscaPorId(id);
-            dao.Remove(post);
-            return RedirectToAction(nameof(Index));
+            using (ISession session = NHibernateHelper.AbreSession())
+            {
+                var dao = new PostDAO(session);
+                Post post = dao.BuscaPorId(id);
+                dao.Remove(post);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [Route("posts/{id}", Name = "VisualizaPost")]
         public ActionResult Visualiza(int id)
         {
-            var dao = PostDAOFactory.CreateDAO();
-            Post post = dao.BuscaPorId(id);
-            return View(post);
+            using (ISession session = NHibernateHelper.AbreSession())
+            {
+                var postDAO = new PostDAO(session);
+                Post post = postDAO.BuscaPorId(id);
+                PostModel viewModel = new PostModel(post);
+                var usuarioDAO = new UsuarioDAO(session);
+                ViewBag.Usuarios = usuarioDAO.Lista();
+                return View(viewModel);
+            }
         }
 
         [HttpPost]
-        public ActionResult Altera(Post post)
+        public ActionResult Altera(PostModel viewModel)
         {
-            ExecutarValidacoesComplexas(post);
+            ExecutarValidacoesComplexas(viewModel);
 
-            if (ModelState.IsValid)
+            using (ISession session = NHibernateHelper.AbreSession())
             {
-                var dao = PostDAOFactory.CreateDAO();
-                dao.Atualiza(post);
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                return View("Visualiza", post);
+                if (ModelState.IsValid)
+                {
+                    var dao = new PostDAO(session);
+                    var post = viewModel.CriaPost();
+                    dao.Atualiza(post);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    var dao = new UsuarioDAO(session);
+                    ViewBag.Usuarios = dao.Lista();
+                    return View("Visualiza", viewModel);
+                }
             }
         }
 
-        private void ExecutarValidacoesComplexas(Post post)
+        private void ExecutarValidacoesComplexas(PostModel viewModel)
         {
-            if (post.Publicado && !post.DataPublicacao.HasValue)
+            if (viewModel.Publicado && !viewModel.DataPublicacao.HasValue)
             {
                 ModelState.AddModelError("post.Invalido", "Posts publicados precisam de data de publicação");
             }
