@@ -7,18 +7,23 @@ using System.Web.Mvc;
 
 namespace BlogWeb.Controllers
 {
-    public class HomeController : Controller
+    public class BuscaController : Controller
     {
         // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC
 
-        // GET: Home
+        // GET: Busca
         public ActionResult Index()
         {
-            // TODO: Tratar ou evitar a exceção do tipo NHibernate.LazyInitializationException, que é jogada na View ao acessar o campo Autor, caso este contenha inicialização lazy.
+            return View();
+        }
+
+        [Route("Busca/Autor/{nome}", Name = "BuscaAutor")]
+        public ActionResult BuscaPorAutor(string nome)
+        {
             using (ISession session = NHibernateHelper.AbreSession())
             {
                 PostDAO dao = new PostDAO(session);
-                IList<Post> lista = dao.ListaPublicados();
+                IList<Post> lista = dao.ListaPublicadosDoAutor(nome);
                 return View(lista);
             }
         }

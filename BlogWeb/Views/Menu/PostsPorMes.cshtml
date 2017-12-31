@@ -1,0 +1,9 @@
+﻿@model IList<BlogWeb.Models.PostsPorMes>
+
+<h3>Publicações</h3>
+<ul>
+    @foreach (var postMes in Model)
+    {
+        <li>@Html.RouteLink(postMes.ToString(), "PostsMes", new { mes = postMes.Mes, ano = postMes.Ano }, null)</li>
+    }
+</ul>

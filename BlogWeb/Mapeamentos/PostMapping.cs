@@ -12,7 +12,9 @@ namespace BlogWeb.Mapeamentos
             Map(p => p.Conteudo);
             Map(p => p.DataPublicacao);
             Map(p => p.Publicado);
-            References(p => p.Autor, "AutorId");
+
+            // TODO: retirar a opção de carregamento lazy sem gerar problemas com a exceção NHibernate.LazyInitializationException.
+            References(p => p.Autor, "AutorId").LazyLoad(Laziness.False);
         }
     }
 }

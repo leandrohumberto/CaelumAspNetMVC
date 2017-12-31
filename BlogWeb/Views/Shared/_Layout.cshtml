@@ -23,6 +23,11 @@
         <main>
             @RenderBody()
         </main>
+        <aside>
+            @Html.Action("Index", "Menu")
+            <br/>
+            @Html.Action("PostsPorMes", "Menu")
+        </aside>
     </div>
     <footer>
         Copyright - Leandro Humberto

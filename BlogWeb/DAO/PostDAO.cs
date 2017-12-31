@@ -1,5 +1,6 @@
 ﻿using BlogWeb.Models;
 using NHibernate;
+using NHibernate.Transform;
 using System;
 using System.Collections.Generic;
 
@@ -58,6 +59,46 @@ namespace BlogWeb.DAO
                 _session.Delete(post);
                 tx.Commit();
             }
+        }
+
+        public IList<Post> ListaPublicados()
+        {
+            string hql = "select p from Post p where p.Publicado = true order by p.DataPublicacao desc";
+            IQuery query = _session.CreateQuery(hql);
+            return query.List<Post>();
+        }
+
+        public IList<Post> ListaPublicadosDoAutor(string nome)
+        {
+            string hql = "select p from Post p join p.Autor a where p.Publicado = true and a.Nome = :nome";
+            IQuery query = _session.CreateQuery(hql);
+            query.SetParameter("nome", nome);
+            return query.List<Post>();
+        }
+
+
+        public IList<Post> ListaPublicadosDoMes(int mes, int ano)
+        {
+            string hql = 
+                "select p from Post p " +
+                "where p.Publicado = true and month(p.DataPublicacao) = :mes and year(p.DataPublicacao) = :ano";
+            IQuery query = _session.CreateQuery(hql);
+            query.SetParameter("mes", mes);
+            query.SetParameter("ano", ano);
+            return query.List<Post>();
+        }
+
+        public IList<PostsPorMes> PublicacoesPorMes()
+        {
+            string hql = 
+                "select month(p.DataPublicacao) as Mes, year(p.DataPublicacao) as Ano, count(p) as Quantidade " +
+                "from Post p " +
+                "where p.Publicado = true " +
+                "group by month(p.DataPublicacao), year(p.DataPublicacao)";
+
+            IQuery query = _session.CreateQuery(hql);
+            query.SetResultTransformer(Transformers.AliasToBean<PostsPorMes>());
+            return query.List<PostsPorMes>();
         }
     }
 }

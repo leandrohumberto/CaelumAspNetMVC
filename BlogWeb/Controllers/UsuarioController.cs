@@ -9,6 +9,8 @@ namespace BlogWeb.Controllers
 {
     public class UsuarioController : Controller
     {
+        // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC
+
         // GET: Usuario
         public ActionResult Index()
         {

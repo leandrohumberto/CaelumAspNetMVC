@@ -10,6 +10,8 @@ namespace BlogWeb.Controllers
 {
     public class PostController : Controller
     {
+        // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC
+
         // GET: Post
         [Route("posts", Name = "ListaPosts")]
         public ActionResult Index()
@@ -77,6 +79,16 @@ namespace BlogWeb.Controllers
                 var usuarioDAO = new UsuarioDAO(session);
                 ViewBag.Usuarios = usuarioDAO.Lista();
                 return View(viewModel);
+            }
+        }
+
+        [Route("{ano}/{mes}", Name = "PostsMes")]
+        public ActionResult PostsMes(int ano, int mes)
+        {
+            using (ISession session = NHibernateHelper.AbreSession())
+            {
+                var postDAO = new PostDAO(session);
+                return View(postDAO.ListaPublicadosDoMes(mes, ano));
             }
         }
 

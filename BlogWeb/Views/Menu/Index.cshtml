@@ -1,0 +1,7 @@
+﻿<h3>Autores</h3>
+<ul>
+    @foreach (BlogWeb.Models.Usuario usuario in ViewBag.Usuarios)
+    {
+        <li>@Html.RouteLink(usuario.Nome, "BuscaAutor", new { nome = usuario.Nome }, null)</li>
+    }
+</ul>

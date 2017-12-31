@@ -1,0 +1,22 @@
+﻿@model IList<BlogWeb.Models.Post>
+
+<div>
+    @foreach (var p in Model)
+    {
+        <article>
+            <h2>@p.Titulo</h2>
+
+            @if (p.Autor != null)
+            {
+                <div class="blog-post-meta">@p.Autor.Nome - @string.Format("{0:dd/MM/yyyy}", p.DataPublicacao)</div>
+            }
+            else
+            {
+                <div class="blog-post-meta">Sem autor - @string.Format("{0:dd/MM/yyyy}", p.DataPublicacao)</div>
+            }
+            <p>
+                @p.Conteudo
+            </p>
+        </article>
+    }
+</div>
