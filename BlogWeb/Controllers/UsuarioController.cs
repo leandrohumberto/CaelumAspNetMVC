@@ -1,4 +1,5 @@
 ﻿using BlogWeb.DAO;
+using BlogWeb.Filters;
 using BlogWeb.Infra;
 using BlogWeb.Models;
 using NHibernate;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 
 namespace BlogWeb.Controllers
 {
+    [AutorizacaoFilter]
     public class UsuarioController : Controller
     {
         // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC

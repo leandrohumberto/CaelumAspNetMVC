@@ -3,5 +3,10 @@
         <li>@Html.ActionLink("Home", "Index", "Home")</li>
         <li>@Html.ActionLink("Posts", "Index", "Post")</li>
         <li>@Html.ActionLink("Usuários", "Index", "Usuario")</li>
+
+        @if (Session["usuario"] != null)
+        {
+            <li>@Html.ActionLink("Logout", "Logout", "Login")</li>
+        }
     </ul>
 </nav>

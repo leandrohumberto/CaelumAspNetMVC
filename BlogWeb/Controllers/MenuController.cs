@@ -1,6 +1,9 @@
 ﻿using BlogWeb.DAO;
 using BlogWeb.Infra;
+using BlogWeb.Models;
+using BlogWeb.ViewModels;
 using NHibernate;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace BlogWeb.Controllers
@@ -25,7 +28,14 @@ namespace BlogWeb.Controllers
             using (ISession session = NHibernateHelper.AbreSession())
             {
                 PostDAO dao = new PostDAO(session);
-                return PartialView(dao.PublicacoesPorMes());
+                IList<PostsPorMesModel> viewModels = new List<PostsPorMesModel>();
+
+                foreach (PostsPorMes postsMes in dao.PublicacoesPorMes())
+                {
+                    viewModels.Add(new PostsPorMesModel(postsMes));
+                }
+
+                return PartialView(viewModels);
             }
         }
     }

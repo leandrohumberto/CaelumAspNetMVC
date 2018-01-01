@@ -59,5 +59,14 @@ namespace BlogWeb.DAO
                 tx.Commit();
             }
         }
+
+        public Usuario Busca(string login, string senha)
+        {
+            string hql = "select u from Usuario u where login = :login and password = :senha";
+            IQuery query = _session.CreateQuery(hql);
+            query.SetParameter("login", login);
+            query.SetParameter("senha", senha);
+            return query.UniqueResult<Usuario>();
+        }
     }
 }

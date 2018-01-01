@@ -151,14 +151,17 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ArquivoController.cs" />
     <Compile Include="Controllers\BuscaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="DAO\IDao.cs" />
     <Compile Include="DAO\PostDAO.cs" />
     <Compile Include="DAO\UsuarioDAO.cs" />
+    <Compile Include="Filters\AutorizacaoFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -169,7 +172,9 @@
     <Compile Include="Models\PostsPorMes.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\LoginModel.cs" />
     <Compile Include="ViewModels\PostModel.cs" />
+    <Compile Include="ViewModels\PostsPorMesModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\BlogWeb.mdf" />
@@ -231,7 +236,8 @@
     <Content Include="Views\Busca\BuscaPorAutor.cshtml" />
     <Content Include="Views\Menu\Index.cshtml" />
     <Content Include="Views\Menu\PostsPorMes.cshtml" />
-    <Content Include="Views\Post\PostsMes.cshtml" />
+    <Content Include="Views\Arquivo\PostsMes.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

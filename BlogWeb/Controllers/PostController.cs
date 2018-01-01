@@ -1,4 +1,5 @@
 ﻿using BlogWeb.DAO;
+using BlogWeb.Filters;
 using BlogWeb.Infra;
 using BlogWeb.Models;
 using BlogWeb.ViewModels;
@@ -8,6 +9,7 @@ using System.Web.Mvc;
 
 namespace BlogWeb.Controllers
 {
+    [AutorizacaoFilter]
     public class PostController : Controller
     {
         // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC
@@ -79,16 +81,6 @@ namespace BlogWeb.Controllers
                 var usuarioDAO = new UsuarioDAO(session);
                 ViewBag.Usuarios = usuarioDAO.Lista();
                 return View(viewModel);
-            }
-        }
-
-        [Route("{ano}/{mes}", Name = "PostsMes")]
-        public ActionResult PostsMes(int ano, int mes)
-        {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                var postDAO = new PostDAO(session);
-                return View(postDAO.ListaPublicadosDoMes(mes, ano));
             }
         }
 
