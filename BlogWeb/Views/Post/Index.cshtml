@@ -19,8 +19,33 @@
                     <td>@p.DataPublicacao</td>
                     <td>@Html.ActionLink("Remover", "Remove", new { id = p.Id }, new { @class = "icon-cancel" })</td>
                     <td>@Html.RouteLink("Editar", "VisualizaPost", new { id = p.Id }, new { @class = "icon-edit" })</td>
+                    <td id="publicar@(p.Id)">
+                        @if (p.Publicado)
+                        {
+                            @: Publicado
+                        }
+                        else
+                        {
+                            <a href="#" onclick="publicaPost(@p.Id);">Publicar</a>                            
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/Scripts/jquery-1.10.2.js"></script>
+
+    <script type="text/javascript">
+        function publicaPost(postId) {
+            var url = "@Url.Action("Publica", "Post")";
+            $.post(url, { id: postId }, function () {
+                var elemento = $("#publicar" + postId);
+                elemento.html("Publicado");
+            });
+        }
+    </script>
+}

@@ -4,6 +4,7 @@ using BlogWeb.Infra;
 using BlogWeb.Models;
 using BlogWeb.ViewModels;
 using NHibernate;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -30,7 +31,7 @@ namespace BlogWeb.Controllers
         {
             using (ISession session = NHibernateHelper.AbreSession())
             {
-                var dao = new PostDAO(session);
+                var dao = new UsuarioDAO(session);
                 ViewBag.Usuarios = dao.Lista();
                 return View();
             }
@@ -104,6 +105,19 @@ namespace BlogWeb.Controllers
                     ViewBag.Usuarios = dao.Lista();
                     return View("Visualiza", viewModel);
                 }
+            }
+        }
+
+        public ActionResult Publica(int id)
+        {
+            using (ISession session = NHibernateHelper.AbreSession())
+            {
+                PostDAO dao = new PostDAO(session);
+                Post post = dao.BuscaPorId(id);
+                post.Publicado = true;
+                post.DataPublicacao = DateTime.Now;
+                dao.Atualiza(post);
+                return new EmptyResult();
             }
         }
 
