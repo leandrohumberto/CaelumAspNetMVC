@@ -1,8 +1,6 @@
 ﻿using BlogWeb.DAO;
 using BlogWeb.Filters;
-using BlogWeb.Infra;
 using BlogWeb.Models;
-using NHibernate;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -11,17 +9,19 @@ namespace BlogWeb.Controllers
     [AutorizacaoFilter]
     public class UsuarioController : Controller
     {
-        // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC
+        private IUsuarioDAO<Usuario> _usuarioDAO;
+
+        public UsuarioController(IUsuarioDAO<Usuario> usuarioDAO)
+        {
+            _usuarioDAO = usuarioDAO;
+        }
 
         // GET: Usuario
+        [Route("usuarios", Name = "ListaUsuarios")]
         public ActionResult Index()
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                var dao = new UsuarioDAO(session);
-                IList<Usuario> usuarios = dao.Lista();
-                return View(usuarios);
-            }
+            IList<Usuario> usuarios = _usuarioDAO.Lista();
+            return View(usuarios);
         }
 
         public ActionResult Form()
@@ -32,58 +32,42 @@ namespace BlogWeb.Controllers
         [HttpPost]
         public ActionResult Adiciona(Usuario usuario)
         {
-            using (ISession session = NHibernateHelper.AbreSession())
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    var dao = new UsuarioDAO(session);
-                    dao.Adiciona(usuario);
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    return View("Form", usuario);
-                }
+                _usuarioDAO.Adiciona(usuario);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View("Form", usuario);
             }
         }
 
         public ActionResult Remove(int id)
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                var dao = new UsuarioDAO(session);
-                Usuario usuario = dao.BuscaPorId(id);
-                dao.Remove(usuario);
-                return RedirectToAction(nameof(Index));
-            }
+            Usuario usuario = _usuarioDAO.BuscaPorId(id);
+            _usuarioDAO.Remove(usuario);
+            return RedirectToAction(nameof(Index));
         }
 
         [Route("usuarios/{id}", Name = "VisualizaUsuario")]
         public ActionResult Visualiza(int id)
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                var dao = new UsuarioDAO(session);
-                Usuario usuario = dao.BuscaPorId(id);
-                return View(usuario);
-            }
+            Usuario usuario = _usuarioDAO.BuscaPorId(id);
+            return View(usuario);
         }
 
         [HttpPost]
         public ActionResult Altera(Usuario usuario)
         {
-            using (ISession session = NHibernateHelper.AbreSession())
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    var dao = new UsuarioDAO(session);
-                    dao.Atualiza(usuario);
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    return View("Visualiza", usuario);
-                }
+                _usuarioDAO.Atualiza(usuario);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View("Visualiza", usuario);
             }
         }
     }

@@ -1,13 +1,17 @@
 ﻿using BlogWeb.DAO;
-using BlogWeb.Infra;
-using NHibernate;
+using BlogWeb.Models;
 using System.Web.Mvc;
 
 namespace BlogWeb.Controllers
 {
     public class ArquivoController : Controller
     {
-        // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC
+        private IPostDAO<Post> _postDAO;
+
+        public ArquivoController(IPostDAO<Post> postDAO)
+        {
+            _postDAO = postDAO;
+        }
 
         // GET: Arquivo
         public ActionResult Index()
@@ -18,11 +22,7 @@ namespace BlogWeb.Controllers
         [Route("arquivo/{ano}/{mes}", Name = "PostsMes")]
         public ActionResult PostsMes(int ano, int mes)
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                var postDAO = new PostDAO(session);
-                return View(postDAO.ListaPublicadosDoMes(mes, ano));
-            }
+            return View(_postDAO.ListaPublicadosDoMes(mes, ano));
         }
     }
 }

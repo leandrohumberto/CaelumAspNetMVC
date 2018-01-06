@@ -1,15 +1,18 @@
 ﻿using BlogWeb.DAO;
-using BlogWeb.Infra;
 using BlogWeb.Models;
 using BlogWeb.ViewModels;
-using NHibernate;
 using System.Web.Mvc;
 
 namespace BlogWeb.Controllers
 {
     public class LoginController : Controller
     {
-        // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC
+        private IUsuarioDAO<Usuario> _usuarioDAO;
+
+        public LoginController(IUsuarioDAO<Usuario> usuarioDAO)
+        {
+            _usuarioDAO = usuarioDAO;
+        }
 
         // GET: Login
         public ActionResult Index()
@@ -19,21 +22,17 @@ namespace BlogWeb.Controllers
 
         public ActionResult Autentica(LoginModel viewModel)
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                UsuarioDAO dao = new UsuarioDAO(session);
-                Usuario usuario = dao.Busca(viewModel.Login, viewModel.Senha);
+            Usuario usuario = _usuarioDAO.Busca(viewModel.Login, viewModel.Senha);
 
-                if (usuario != null)
-                {
-                    Session["usuario"] = usuario;
-                    return RedirectToAction("Index", "Post");
-                }
-                else
-                {
-                    ModelState.AddModelError("login.Invalido", "Login ou senha incorretos");
-                    return View("Index");
-                }
+            if (usuario != null)
+            {
+                Session["usuario"] = usuario;
+                return RedirectToAction("Index", "Post");
+            }
+            else
+            {
+                ModelState.AddModelError("login.Invalido", "Login ou senha incorretos");
+                return View("Index");
             }
         }
 

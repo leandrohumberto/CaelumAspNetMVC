@@ -3,7 +3,6 @@ using BlogWeb.Filters;
 using BlogWeb.Infra;
 using BlogWeb.Models;
 using BlogWeb.ViewModels;
-using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -13,112 +12,88 @@ namespace BlogWeb.Controllers
     [AutorizacaoFilter]
     public class PostController : Controller
     {
-        // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC
+        private IPostDAO<Post> _postDAO;
+        private IUsuarioDAO<Usuario> _usuarioDAO;
+
+        public PostController(IPostDAO<Post> postDAO, IUsuarioDAO<Usuario> usuarioDAO)
+        {
+            _postDAO = postDAO;
+            _usuarioDAO = usuarioDAO;
+        }
 
         // GET: Post
         [Route("posts", Name = "ListaPosts")]
         public ActionResult Index()
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                var dao = new PostDAO(session);
-                IList<Post> posts = dao.Lista();
-                return View(posts);
-            }
+            IList<Post> posts = _postDAO.Lista();
+            return View(posts);
         }
 
         public ActionResult Form()
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                var dao = new UsuarioDAO(session);
-                ViewBag.Usuarios = dao.Lista();
-                return View();
-            }
+            ViewBag.Usuarios = _usuarioDAO.Lista();
+            return View();
         }
 
         [HttpPost]
         public ActionResult Adiciona(PostModel viewModel)
         {
             ExecutarValidacoesComplexas(viewModel);
-
-            using (ISession session = NHibernateHelper.AbreSession())
+            
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    var post = viewModel.CriaPost();
-                    var postDAO = new PostDAO(session);
-                    postDAO.Adiciona(post);
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    var usuarioDAO = new UsuarioDAO(session);
-                    ViewBag.Usuarios = usuarioDAO.Lista();
-                    return View("Form", viewModel);
-                }
+                var post = viewModel.CriaPost();
+                _postDAO.Adiciona(post);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ViewBag.Usuarios = _usuarioDAO.Lista();
+                return View("Form", viewModel);
             }
         }
 
         public ActionResult Remove(int id)
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                var dao = new PostDAO(session);
-                Post post = dao.BuscaPorId(id);
-                dao.Remove(post);
-                return RedirectToAction(nameof(Index));
-            }
+            Post post = _postDAO.BuscaPorId(id);
+            _postDAO.Remove(post);
+            return RedirectToAction(nameof(Index));
         }
 
         [Route("posts/{id}", Name = "VisualizaPost")]
         public ActionResult Visualiza(int id)
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                var postDAO = new PostDAO(session);
-                Post post = postDAO.BuscaPorId(id);
-                PostModel viewModel = new PostModel(post);
-                var usuarioDAO = new UsuarioDAO(session);
-                ViewBag.Usuarios = usuarioDAO.Lista();
-                return View(viewModel);
-            }
+            Post post = _postDAO.BuscaPorId(id);
+            PostModel viewModel = new PostModel(post);
+            ViewBag.Usuarios = _usuarioDAO.Lista();
+            return View(viewModel);
         }
 
         [HttpPost]
         public ActionResult Altera(PostModel viewModel)
         {
             ExecutarValidacoesComplexas(viewModel);
-
-            using (ISession session = NHibernateHelper.AbreSession())
+            
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    var dao = new PostDAO(session);
-                    var post = viewModel.CriaPost();
-                    dao.Atualiza(post);
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    var dao = new UsuarioDAO(session);
-                    ViewBag.Usuarios = dao.Lista();
-                    return View("Visualiza", viewModel);
-                }
+                var post = viewModel.CriaPost();
+                _postDAO.Atualiza(post);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ViewBag.Usuarios = _usuarioDAO.Lista();
+                return View("Visualiza", viewModel);
             }
         }
 
         public ActionResult Publica(int id)
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                PostDAO dao = new PostDAO(session);
-                Post post = dao.BuscaPorId(id);
-                post.Publicado = true;
-                post.DataPublicacao = DateTime.Now;
-                dao.Atualiza(post);
-                return new EmptyResult();
-            }
+            Post post = _postDAO.BuscaPorId(id);
+            post.Publicado = true;
+            post.DataPublicacao = DateTime.Now;
+            _postDAO.Atualiza(post);
+            return new EmptyResult();
         }
 
         private void ExecutarValidacoesComplexas(PostModel viewModel)

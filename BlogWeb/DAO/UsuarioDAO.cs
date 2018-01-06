@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BlogWeb.DAO
 {
-    public class UsuarioDAO : IDao<Usuario>
+    public class UsuarioDAO : IUsuarioDAO<Usuario>
     {
         private ISession _session;
 

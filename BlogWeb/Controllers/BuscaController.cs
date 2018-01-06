@@ -1,7 +1,5 @@
 ﻿using BlogWeb.DAO;
-using BlogWeb.Infra;
 using BlogWeb.Models;
-using NHibernate;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -9,7 +7,12 @@ namespace BlogWeb.Controllers
 {
     public class BuscaController : Controller
     {
-        // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC
+        private IPostDAO<Post> _postDAO;
+
+        public BuscaController(IPostDAO<Post> postDAO)
+        {
+            _postDAO = postDAO;
+        }
 
         // GET: Busca
         public ActionResult Index()
@@ -20,12 +23,8 @@ namespace BlogWeb.Controllers
         [Route("Busca/Autor/{nome}", Name = "BuscaAutor")]
         public ActionResult BuscaPorAutor(string nome)
         {
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                PostDAO dao = new PostDAO(session);
-                IList<Post> lista = dao.ListaPublicadosDoAutor(nome);
-                return View(lista);
-            }
+            IList<Post> lista = _postDAO.ListaPublicadosDoAutor(nome);
+            return View(lista);
         }
     }
 }

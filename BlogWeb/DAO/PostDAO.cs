@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace BlogWeb.DAO
 {
-    public class PostDAO : IDao<Post>
+    public class PostDAO : IPostDAO<Post>
     {
         private ISession _session;
 
@@ -88,7 +88,7 @@ namespace BlogWeb.DAO
             return query.List<Post>();
         }
 
-        public IList<PostsPorMes> PublicacoesPorMes()
+        public IList<PostsPorMes> PublicacoesPorMes<PostsPorMes>()
         {
             string hql = 
                 "select month(p.DataPublicacao) as Mes, year(p.DataPublicacao) as Ano, count(p) as Quantidade " +

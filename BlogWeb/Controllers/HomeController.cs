@@ -1,5 +1,4 @@
 ﻿using BlogWeb.DAO;
-using BlogWeb.Infra;
 using BlogWeb.Models;
 using NHibernate;
 using System.Collections.Generic;
@@ -9,18 +8,19 @@ namespace BlogWeb.Controllers
 {
     public class HomeController : Controller
     {
-        // TODO: Construtor da classe com parâmetros IDao<T> para injeção de dependência com o Ninject.MVC
+        private IPostDAO<Post> _postDAO;
+
+        public HomeController(IPostDAO<Post> postDAO)
+        {
+            _postDAO = postDAO;
+        }
 
         // GET: Home
         public ActionResult Index()
         {
             // TODO: Tratar ou evitar a exceção do tipo NHibernate.LazyInitializationException, que é jogada na View ao acessar o campo Autor, caso este contenha inicialização lazy.
-            using (ISession session = NHibernateHelper.AbreSession())
-            {
-                PostDAO dao = new PostDAO(session);
-                IList<Post> lista = dao.ListaPublicados();
-                return View(lista);
-            }
+            IList<Post> lista = _postDAO.ListaPublicados();
+            return View(lista);
         }
     }
 }

@@ -2,6 +2,8 @@
 
 @using (Html.BeginForm("Altera", "Usuario", FormMethod.Post))
 {
+    @Html.HiddenFor(u => u.Id);
+
     @Html.LabelFor(u => u.Nome, "Nome: ")
     @Html.TextBoxFor(u => u.Nome);
     @Html.ValidationMessageFor(u => u.Nome);
