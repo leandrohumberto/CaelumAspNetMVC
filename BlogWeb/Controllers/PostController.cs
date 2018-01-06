@@ -1,6 +1,5 @@
 ﻿using BlogWeb.DAO;
 using BlogWeb.Filters;
-using BlogWeb.Infra;
 using BlogWeb.Models;
 using BlogWeb.ViewModels;
 using System;
@@ -39,7 +38,7 @@ namespace BlogWeb.Controllers
         public ActionResult Adiciona(PostModel viewModel)
         {
             ExecutarValidacoesComplexas(viewModel);
-            
+
             if (ModelState.IsValid)
             {
                 var post = viewModel.CriaPost();
@@ -73,7 +72,7 @@ namespace BlogWeb.Controllers
         public ActionResult Altera(PostModel viewModel)
         {
             ExecutarValidacoesComplexas(viewModel);
-            
+
             if (ModelState.IsValid)
             {
                 var post = viewModel.CriaPost();
