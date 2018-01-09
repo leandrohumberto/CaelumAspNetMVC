@@ -1,5 +1,4 @@
 ﻿using BlogWeb.DAO;
-using BlogWeb.Filters;
 using BlogWeb.Models;
 using BlogWeb.ViewModels;
 using System;
@@ -8,7 +7,7 @@ using System.Web.Mvc;
 
 namespace BlogWeb.Controllers
 {
-    [AutorizacaoFilter]
+    [Authorize]
     public class PostController : Controller
     {
         private IPostDAO<Post> _postDAO;
@@ -35,6 +34,7 @@ namespace BlogWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Adiciona(PostModel viewModel)
         {
             ExecutarValidacoesComplexas(viewModel);
@@ -52,11 +52,13 @@ namespace BlogWeb.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Remove(int id)
         {
             Post post = _postDAO.BuscaPorId(id);
             _postDAO.Remove(post);
-            return RedirectToAction(nameof(Index));
+            return new EmptyResult();
         }
 
         [Route("posts/{id}", Name = "VisualizaPost")]
@@ -69,6 +71,7 @@ namespace BlogWeb.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Altera(PostModel viewModel)
         {
             ExecutarValidacoesComplexas(viewModel);
@@ -86,6 +89,8 @@ namespace BlogWeb.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Publica(int id)
         {
             Post post = _postDAO.BuscaPorId(id);

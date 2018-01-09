@@ -1,6 +1,4 @@
-﻿@* arquivo Views/Usuario/Index.cshtml *@
-
-@model IList<BlogWeb.Models.Usuario>
+﻿@model IList<BlogWeb.Models.Usuario>
 
 @Html.RouteLink("Novo Usuário", "NovoUsuario")
 
@@ -21,9 +19,35 @@
                 <td>@u.Nome</td>
                 <td>@u.Login</td>
                 <td>@u.Email</td>
-                <td>@Html.ActionLink("Remover", "Remove", new { id = u.Id }, new { @class = "icon-cancel" })</td>
+                <td><a href="#" class="icon-cancel" onclick="removeUsuario(@u.Id);">Remover</a></td>
                 <td>@Html.RouteLink("Editar", "VisualizaUsuario", new { id = u.Id }, new { @class = "icon-edit" })</td>
             </tr>
         }
     </tbody>
 </table>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/Scripts/jquery-1.10.2.js"></script>
+
+    <script type="text/javascript">
+        function removeUsuario(postId) {
+            var url = "@Url.Action("Remove", "Usuario")";
+            var token = antiForgetyToken();
+            $.post(url, { id: postId, __RequestVerificationToken: token }, function () {
+                window.location.reload(false);
+            });
+        }
+
+        function antiForgetyToken() {
+            var form = $("#__AjaxAntiForgeryForm");
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            return token;
+        }
+    </script> 
+}

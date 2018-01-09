@@ -4,7 +4,7 @@
         <li>@Html.ActionLink("Posts", "Index", "Post")</li>
         <li>@Html.ActionLink("Usuários", "Index", "Usuario")</li>
 
-        @if (Session["usuario"] != null)
+        @if (WebSecurity.IsAuthenticated)
         {
             <li>@Html.ActionLink("Logout", "Logout", "Login")</li>
         }

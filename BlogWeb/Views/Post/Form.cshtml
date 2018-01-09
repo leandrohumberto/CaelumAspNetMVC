@@ -3,6 +3,8 @@
 <div> 
     @using (Html.BeginForm("Adiciona", "Post", FormMethod.Post))
     {
+        @Html.AntiForgeryToken()
+
         @Html.ValidationMessage("post.Invalido")
             
         @Html.LabelFor(p => p.Titulo, "Título: ")

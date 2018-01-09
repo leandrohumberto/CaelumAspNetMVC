@@ -3,6 +3,8 @@
 <div> 
     @using (Html.BeginForm("Altera", "Post", FormMethod.Post))
     {
+        @Html.AntiForgeryToken()
+
         @Html.HiddenFor(p => p.Id);
 
         @Html.ValidationMessage("post.Invalido");

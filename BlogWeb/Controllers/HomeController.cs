@@ -18,7 +18,6 @@ namespace BlogWeb.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            // TODO: Tratar ou evitar a exceção do tipo NHibernate.LazyInitializationException, que é jogada na View ao acessar o campo Autor, caso este contenha inicialização lazy.
             IList<Post> lista = _postDAO.ListaPublicados();
             return View(lista);
         }

@@ -2,6 +2,7 @@
 using BlogWeb.Models;
 using BlogWeb.ViewModels;
 using System.Web.Mvc;
+using WebMatrix.WebData;
 
 namespace BlogWeb.Controllers
 {
@@ -12,22 +13,26 @@ namespace BlogWeb.Controllers
         public LoginController(IUsuarioDAO<Usuario> usuarioDAO)
         {
             _usuarioDAO = usuarioDAO;
+
+            if (!WebSecurity.Initialized)
+            {
+                WebSecurity.InitializeDatabaseConnection("blog", "Usuario", "Id", "Login", true);
+            }
         }
 
         // GET: Login
-        public ActionResult Index()
+        public ActionResult Index(string returnUrl)
         {
-            return View();
+            return View(new LoginModel { Url = returnUrl });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Autentica(LoginModel viewModel)
         {
-            Usuario usuario = _usuarioDAO.Busca(viewModel.Login, viewModel.Senha);
-
-            if (usuario != null)
+            if (WebSecurity.Login(viewModel.Login, viewModel.Senha))
             {
-                Session["usuario"] = usuario;
-                return RedirectToAction("Index", "Post");
+                return Redirect(viewModel.Url);
             }
             else
             {
@@ -38,7 +43,7 @@ namespace BlogWeb.Controllers
 
         public ActionResult Logout()
         {
-            Session.Abandon();
+            WebSecurity.Logout();
             return RedirectToAction("Index", "Home");
         }
     }

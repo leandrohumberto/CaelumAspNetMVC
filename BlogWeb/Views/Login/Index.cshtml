@@ -1,11 +1,18 @@
-﻿@Html.ValidationMessage("login.Invalido")
-<form action="/Login/Autentica" method="post">
+﻿@model BlogWeb.ViewModels.LoginModel
 
-    <label for="login">Login:</label>
-    <input id="login" name="login" type="text" />
+@using (Html.BeginForm("Autentica", "Login", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
 
-    <label for="senha">Senha:</label>
-    <input id="senha" name="senha" type="password" />
+    @Html.HiddenFor(u => u.Url)
+
+    @Html.ValidationMessage("login.Invalido")
+
+    @Html.LabelFor(u => u.Login, "Login:" )
+    @Html.TextBoxFor(u => u.Login)
+
+    @Html.LabelFor(u => u.Senha, "Senha:")
+    @Html.PasswordFor(u => u.Senha)
 
     <input type="submit" value="Entrar" />
-</form>
+}

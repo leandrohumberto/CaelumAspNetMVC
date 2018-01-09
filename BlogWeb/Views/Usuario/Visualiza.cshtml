@@ -2,6 +2,8 @@
 
 @using (Html.BeginForm("Altera", "Usuario", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
+
     @Html.HiddenFor(u => u.Id);
 
     @Html.LabelFor(u => u.Nome, "Nome: ")

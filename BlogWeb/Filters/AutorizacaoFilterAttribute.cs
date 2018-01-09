@@ -3,13 +3,14 @@ using System.Web.Routing;
 
 namespace BlogWeb.Filters
 {
+    /// <summary>
+    /// [DEPRECATED]
+    /// </summary>
     public class AutorizacaoFilterAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var usuario = filterContext.HttpContext.Session["usuario"];
-
-            if (usuario == null)
+            if (!WebMatrix.WebData.WebSecurity.IsAuthenticated)
             {
                 filterContext.Result = new RedirectToRouteResult(
                     new RouteValueDictionary(

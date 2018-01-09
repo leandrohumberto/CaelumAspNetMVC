@@ -17,7 +17,7 @@
                     <td>@p.Id</td>
                     <td>@p.Titulo</td>
                     <td>@p.DataPublicacao</td>
-                    <td>@Html.ActionLink("Remover", "Remove", new { id = p.Id }, new { @class = "icon-cancel" })</td>
+                    <td><a href="#" class="icon-cancel" onclick="removePost(@p.Id);">Remover</a></td>
                     <td>@Html.RouteLink("Editar", "VisualizaPost", new { id = p.Id }, new { @class = "icon-edit" })</td>
                     <td id="publicar@(p.Id)">
                         @if (p.Publicado)
@@ -33,6 +33,11 @@
             }
         </tbody>
     </table>
+    
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+    {
+        @Html.AntiForgeryToken()
+    }
 </div>
 
 @section Scripts
@@ -42,10 +47,25 @@
     <script type="text/javascript">
         function publicaPost(postId) {
             var url = "@Url.Action("Publica", "Post")";
-            $.post(url, { id: postId }, function () {
+            var token = antiForgetyToken();
+            $.post(url, { id: postId, __RequestVerificationToken: token }, function () {
                 var elemento = $("#publicar" + postId);
                 elemento.html("Publicado");
             });
+        }
+
+        function removePost(postId) {
+            var url = "@Url.Action("Remove", "Post")";
+            var token = antiForgetyToken();
+            $.post(url, { id: postId, __RequestVerificationToken: token }, function () {
+                window.location.reload(false);
+            });
+        }
+
+        function antiForgetyToken() {
+            var form = $("#__AjaxAntiForgeryForm");
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            return token;
         }
     </script>
 }

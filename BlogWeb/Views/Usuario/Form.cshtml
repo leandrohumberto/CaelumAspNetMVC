@@ -2,6 +2,10 @@
 
 @using (Html.BeginForm("Adiciona", "Usuario", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationMessage("usuario.Invalido")
+
     @Html.LabelFor(u => u.Nome, "Nome: ")
     @Html.TextBoxFor(u => u.Nome);
     @Html.ValidationMessageFor(u => u.Nome);
