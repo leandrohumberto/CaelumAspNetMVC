@@ -1,4 +1,5 @@
-﻿using BlogWeb.DAO;
+﻿using AutoMapper;
+using BlogWeb.DAO;
 using BlogWeb.Models;
 using BlogWeb.ViewModels;
 using System;
@@ -12,11 +13,13 @@ namespace BlogWeb.Controllers
     {
         private IPostDAO<Post> _postDAO;
         private IUsuarioDAO<Usuario> _usuarioDAO;
+        private IDao<Tag> _tagDAO;
 
-        public PostController(IPostDAO<Post> postDAO, IUsuarioDAO<Usuario> usuarioDAO)
+        public PostController(IPostDAO<Post> postDAO, IUsuarioDAO<Usuario> usuarioDAO, IDao<Tag> tagDAO)
         {
             _postDAO = postDAO;
             _usuarioDAO = usuarioDAO;
+            _tagDAO = tagDAO;
         }
 
         // GET: Post
@@ -29,6 +32,7 @@ namespace BlogWeb.Controllers
 
         public ActionResult Form()
         {
+            ViewBag.ListaTags = _tagDAO.Lista();
             ViewBag.Usuarios = _usuarioDAO.Lista();
             return View();
         }
@@ -41,12 +45,13 @@ namespace BlogWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                var post = viewModel.CriaPost();
+                Post post = Mapper.Map<Post>(viewModel);
                 _postDAO.Adiciona(post);
                 return RedirectToAction(nameof(Index));
             }
             else
             {
+                ViewBag.ListaTags = _tagDAO.Lista();
                 ViewBag.Usuarios = _usuarioDAO.Lista();
                 return View("Form", viewModel);
             }
@@ -65,7 +70,8 @@ namespace BlogWeb.Controllers
         public ActionResult Visualiza(int id)
         {
             Post post = _postDAO.BuscaPorId(id);
-            PostModel viewModel = new PostModel(post);
+            PostModel viewModel = Mapper.Map<PostModel>(post);
+            ViewBag.ListaTags = _tagDAO.Lista();
             ViewBag.Usuarios = _usuarioDAO.Lista();
             return View(viewModel);
         }
@@ -78,12 +84,13 @@ namespace BlogWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                var post = viewModel.CriaPost();
+                Post post = Mapper.Map<Post>(viewModel);
                 _postDAO.Atualiza(post);
                 return RedirectToAction(nameof(Index));
             }
             else
             {
+                ViewBag.ListaTags = _tagDAO.Lista();
                 ViewBag.Usuarios = _usuarioDAO.Lista();
                 return View("Visualiza", viewModel);
             }

@@ -1,4 +1,5 @@
-﻿using BlogWeb.DAO;
+﻿using AutoMapper;
+using BlogWeb.DAO;
 using BlogWeb.Models;
 using BlogWeb.ViewModels;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace BlogWeb.Controllers
 
             foreach (PostsPorMes postsMes in _postDAO.PublicacoesPorMes<PostsPorMes>())
             {
-                viewModels.Add(new PostsPorMesModel(postsMes));
+                viewModels.Add(Mapper.Map<PostsPorMesModel>(postsMes));
             }
 
             return PartialView(viewModels);

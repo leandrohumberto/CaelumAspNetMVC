@@ -1,6 +1,4 @@
-﻿using BlogWeb.Models;
-
-namespace BlogWeb.ViewModels
+﻿namespace BlogWeb.ViewModels
 {
     public class PostsPorMesModel
     {
@@ -11,13 +9,6 @@ namespace BlogWeb.ViewModels
         public int Ano { get; set; }
 
         public long Quantidade { get; set; }
-        
-        public PostsPorMesModel(PostsPorMes postsPorMes)
-        {
-            Mes = postsPorMes.Mes;
-            Ano = postsPorMes.Ano;
-            Quantidade = postsPorMes.Quantidade;
-        }
 
         public override string ToString()
         {

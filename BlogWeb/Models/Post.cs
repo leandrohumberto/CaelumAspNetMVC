@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BlogWeb.Models
+﻿namespace BlogWeb.Models
 {
     public class Post
     {
@@ -15,5 +13,7 @@ namespace BlogWeb.Models
         public virtual bool Publicado { get; set; }
 
         public virtual Usuario Autor { get; set; }
+
+        public virtual System.Collections.Generic.IList<Tag> Tags { get; set; }
     }
 }

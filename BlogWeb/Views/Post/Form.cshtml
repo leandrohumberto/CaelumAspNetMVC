@@ -6,19 +6,19 @@
         @Html.AntiForgeryToken()
 
         @Html.ValidationMessage("post.Invalido")
-            
+
         @Html.LabelFor(p => p.Titulo, "Título: ")
         @Html.TextBoxFor(p => p.Titulo)
         @Html.ValidationMessageFor(p => p.Titulo)
-            
+
         @Html.LabelFor(p => p.Conteudo, "Conteúdo: ")
         @Html.TextAreaFor(p => p.Conteudo, new { rows = 10 })
         @Html.ValidationMessageFor(p => p.Conteudo)
-            
+
         @Html.LabelFor(p => p.DataPublicacao, "Data de Publicação: ")
         @Html.TextBoxFor(p => p.DataPublicacao, "{0:yyyy-MM-dd}", new { type = "date" })
         @Html.ValidationMessageFor(p => p.DataPublicacao)
-            
+
         @Html.LabelFor(p => p.Publicado, "Publicado ")
         @Html.CheckBoxFor(p => p.Publicado)
         @Html.ValidationMessageFor(p => p.Publicado)
@@ -26,6 +26,10 @@
         @Html.LabelFor(p => p.AutorId, "Autor: ")
         @Html.DropDownListFor(p => p.AutorId, new SelectList(ViewBag.Usuarios, "Id", "Nome"), "Sem autor")
         @Html.ValidationMessageFor(p => p.AutorId)
+
+        @Html.LabelFor(p => p.Tags, "Tags:")
+        @Html.ListBoxFor(p => p.Tags, new SelectList(ViewBag.ListaTags, "Id", "Nome"))
+        @Html.ValidationMessageFor(p => p.Tags)
 
         <input type="submit" value="Cadastrar" />
     }

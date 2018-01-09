@@ -29,6 +29,10 @@
         @Html.DropDownListFor(p => p.AutorId, new SelectList(ViewBag.Usuarios, "Id", "Nome"), "Sem autor")
         @Html.ValidationMessageFor(p => p.AutorId);
 
+        @Html.LabelFor(p => p.Tags, "Tags:")
+        @Html.ListBoxFor(p => p.Tags, new SelectList(ViewBag.ListaTags, "Id", "Nome"))
+        @Html.ValidationMessageFor(p => p.Tags)
+
         <input type="submit" value="Alterar" />
     }
 </div>

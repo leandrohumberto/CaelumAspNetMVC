@@ -13,6 +13,10 @@ namespace BlogWeb.Mapeamentos
             Map(p => p.DataPublicacao);
             Map(p => p.Publicado);
             References(p => p.Autor, "AutorId");
+            HasManyToMany(p => p.Tags)
+                .Table("Post_Tags")
+                .ParentKeyColumn("PostId")
+                .ChildKeyColumn("TagId");
         }
     }
 }

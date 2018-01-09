@@ -1,5 +1,6 @@
 ﻿using BlogWeb.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlogWeb.ViewModels
@@ -20,40 +21,6 @@ namespace BlogWeb.ViewModels
 
         public int? AutorId { get; set; }
 
-        public PostModel() { }
-
-        public PostModel(Post post) : this()
-        {
-            Id = post.Id;
-            Titulo = post.Titulo;
-            Conteudo = post.Conteudo;
-            Publicado = post.Publicado;
-            DataPublicacao = post.DataPublicacao;
-
-            if (post.Autor != null && post.Autor.Id != 0)
-            {
-                AutorId = post.Autor.Id;
-            }
-        }
-
-        public Post CriaPost()
-        {
-            Post post = new Post()
-            {
-                Id = this.Id,
-                Titulo = this.Titulo,
-                Conteudo = this.Conteudo,
-                Publicado = this.Publicado,
-                DataPublicacao = this.DataPublicacao,
-            };
-
-            if (AutorId != null && AutorId != 0)
-            {
-                Usuario autor = new Usuario() { Id = AutorId.Value, };
-                post.Autor = autor;
-            }
-
-            return post;
-        }
+        public IList<int> Tags { get; set; }
     }
 }

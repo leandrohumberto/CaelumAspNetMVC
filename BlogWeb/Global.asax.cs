@@ -25,6 +25,7 @@ namespace BlogWeb
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            AutoMapperConfig.ConfigureAutoMapper();
         }
 
         private void RegisterServices(IKernel kernel)
@@ -38,6 +39,15 @@ namespace BlogWeb
 
             kernel.Bind<IUsuarioDAO<Usuario>>()
                 .To<UsuarioDAO>();
+
+            kernel.Bind<IDao<Post>>()
+                .To<PostDAO>();
+
+            kernel.Bind<IDao<Usuario>>()
+                .To<UsuarioDAO>();
+
+            kernel.Bind<IDao<Tag>>()
+                .To<TagDAO>();
         }
 
         protected override IKernel CreateKernel()
